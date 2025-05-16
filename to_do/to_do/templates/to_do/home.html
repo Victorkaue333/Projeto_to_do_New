@@ -1,69 +1,100 @@
 {% extends "to_do/base.html" %}
 {% load static %}
+{% block title %}To-Do List{% endblock %}
 
 {% block content %}
-  <h1>Seja bem-vindo ao To-do list</h1>
+<h1 class="text-center mb-4">Seja bem-vindo ao To-do list</h1>
 
-  <div class="mb-3">
-    <input type="text" id="new-task" class="form-control" placeholder="Digite uma nova tarefa">
-    <button id="add-task-btn" class="btn btn-primary mt-2">Adicionar Tarefa</button>
+<div class="mb-3 d-flex gap-2">
+  <input type="text" id="new-task" class="form-control" placeholder="Digite uma nova tarefa">
+  <button id="add-task-btn" class="btn btn-primary">Adicionar Tarefa</button>
+</div>
+
+<div class="row">
+  <div class="col-md-4">
+    <h4 class="text-center">A Fazer</h4>
+    <ul id="todo-list" class="list-group min-vh-50 p-2 bg-light border rounded" ondragover="event.preventDefault()" ondrop="drop(event)">
+    </ul>
   </div>
+  <div class="col-md-4">
+    <h4 class="text-center">Em Realização</h4>
+    <ul id="doing-list" class="list-group min-vh-50 p-2 bg-light border rounded" ondragover="event.preventDefault()" ondrop="drop(event)">
+    </ul>
+  </div>
+  <div class="col-md-4">
+    <h4 class="text-center">Concluído</h4>
+    <ul id="done-list" class="list-group min-vh-50 p-2 bg-light border rounded" ondragover="event.preventDefault()" ondrop="drop(event)">
+    </ul>
+  </div>
+</div>
 
-  <ul id="task-list" class="list-group">
-    <!-- Tarefas aparecerão aqui -->
-  </ul>
+<script>
+  let taskIdCounter = 0;
 
-  <script>
-    const addTaskBtn = document.getElementById('add-task-btn');
-    const taskInput = document.getElementById('new-task');
-    const taskList = document.getElementById('task-list');
+  const addTaskBtn = document.getElementById('add-task-btn');
+  const taskInput = document.getElementById('new-task');
+  const todoList = document.getElementById('todo-list');
 
-    addTaskBtn.addEventListener('click', () => {
-      const taskText = taskInput.value.trim();
-      if (taskText) {
-        const li = document.createElement('li');
-        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+  function createTaskElement(text) {
+    const li = document.createElement('li');
+    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+    li.id = 'task-' + taskIdCounter++;
+    li.setAttribute('draggable', true);
+    li.addEventListener('dragstart', drag);
 
-        // Criar checkbox
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.className = 'form-check-input me-2';
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'form-check-input me-2';
 
-        // Criar span para texto da tarefa
-        const span = document.createElement('span');
-        span.textContent = taskText;
+    const span = document.createElement('span');
+    span.textContent = text;
 
-        // Quando marcar/desmarcar, riscar texto
-        checkbox.addEventListener('change', () => {
-          if (checkbox.checked) {
-            span.style.textDecoration = 'line-through';
-            span.style.color = 'gray';
-          } else {
-            span.style.textDecoration = 'none';
-            span.style.color = 'inherit';
-          }
-        });
-
-        // Botão remover
-        const removeBtn = document.createElement('button');
-        removeBtn.className = 'btn btn-danger btn-sm';
-        removeBtn.textContent = 'Remover';
-        removeBtn.onclick = () => taskList.removeChild(li);
-
-        // Montar item da lista: checkbox + texto + botão
-        const taskContainer = document.createElement('div');
-        taskContainer.className = 'd-flex align-items-center flex-grow-1';
-        taskContainer.appendChild(checkbox);
-        taskContainer.appendChild(span);
-
-        li.appendChild(taskContainer);
-        li.appendChild(removeBtn);
-
-        taskList.appendChild(li);
-        taskInput.value = '';
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        span.style.textDecoration = 'line-through';
+        span.style.color = 'gray';
       } else {
-        alert('Digite uma tarefa antes de adicionar!');
+        span.style.textDecoration = 'none';
+        span.style.color = 'inherit';
       }
     });
-  </script>
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'btn btn-danger btn-sm ms-2';
+    removeBtn.textContent = 'Remover';
+    removeBtn.onclick = () => li.remove();
+
+    const container = document.createElement('div');
+    container.className = 'd-flex align-items-center flex-grow-1';
+    container.appendChild(checkbox);
+    container.appendChild(span);
+
+    li.appendChild(container);
+    li.appendChild(removeBtn);
+
+    return li;
+  }
+
+  function drag(event) {
+    event.dataTransfer.setData('text/plain', event.target.id);
+  }
+
+  function drop(event) {
+    event.preventDefault();
+    const taskId = event.dataTransfer.getData('text/plain');
+    const taskElement = document.getElementById(taskId);
+    event.currentTarget.appendChild(taskElement);
+  }
+
+  addTaskBtn.addEventListener('click', () => {
+    const taskText = taskInput.value.trim();
+    if (taskText) {
+      const taskItem = createTaskElement(taskText);
+      todoList.appendChild(taskItem);
+      taskInput.value = '';
+    } else {
+      alert('Digite uma tarefa antes de adicionar!');
+    }
+  });
+</script>
 {% endblock %}
