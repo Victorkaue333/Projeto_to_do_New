@@ -1,0 +1,21 @@
+{% extends "to_do/base.html"%}
+{% load static %}
+
+        {% block content%}
+        <link rel="stylesheet" href="static/style.css">
+        <title>Login</title>
+        </head>
+        <body>
+           <div >
+            <h2>Cadastro</h2>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+            
+                <button type="submit" >Entrar</button>
+                <p class="signup-link">Já tem conta ? <a href="#">Cadastre-se</a></p>
+            </form>
+            </div>
+        
+  
+    {% endblock%}

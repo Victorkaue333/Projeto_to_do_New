@@ -1,0 +1,41 @@
+{% extends "to_do/base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- Link para o CSS personalizado -->
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<title>Login</title>
+
+<body>
+    <div class="container mt-5">
+        <h2 class="text-center">Login</h2>
+        <form method="POST">
+            {% csrf_token %}
+
+            <!-- Campo de nome de usuário com Bootstrap -->
+            <div class="mb-3">
+                <label for="username" class="form-label">Nome de Usuário</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Digite seu nome de usuário" required>
+            </div>
+
+            <!-- Campo de senha com Bootstrap lskjdkj-->
+            <div class="mb-3">
+                <label for="password" class="form-label">Sua senha</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="1234" required>
+            </div>
+
+            <!-- Checkbox "Manter-me logado" com Bootstrap -->
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="remember-me" name="remember-me">
+                <label class="form-check-label" for="remember-me">Manter-me logado</label>
+            </div>
+
+            <!-- Botão de login com Bootstrap -->
+            <button type="submit" class="btn btn-primary w-100">Entrar</button>
+
+            <!-- Link para cadastro -->
+            <p class="signup-link text-center mt-3">Ainda não tem conta? <a href="cadastro.html">Cadastre-se</a></p>
+        </form>
+    </div>
+</body>
+{% endblock %}
