@@ -1,4 +1,5 @@
-#venv\Scripts\activate
+#python -m venv venv
+# venv\Scripts\activate
 #cd to_do
 #python manage.py runserver
 
