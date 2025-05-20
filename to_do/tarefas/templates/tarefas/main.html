@@ -3,21 +3,23 @@
 {% block title %}To-Do List{% endblock %}
 
 {% block content %}
-<h1 class="text-center mb-4">Seja bem-vindo ao To-do list</h1>
+<h1 class="text-center mb-4">Organize a sua vida com o To do List</h1>
 
+<!-- Esse campo adiciona uma nova tarefa -->
 <div class="mb-3 d-flex gap-2">
   <input type="text" id="new-task" class="form-control" placeholder="Digite uma nova tarefa">
   <button id="add-task-btn" class="btn btn-primary">Adicionar Tarefa</button>
 </div>
 
+<!-- Campo abaixo de adiconar -->
 <div class="row">
   <div class="col-md-4">
-    <h4 class="text-center">A Fazer</h4>
+    <h4 class="text-center">A fazer</h4>
     <ul id="todo-list" class="list-group min-vh-50 p-2 bg-light border rounded" ondragover="event.preventDefault()" ondrop="drop(event)">
     </ul>
   </div>
   <div class="col-md-4">
-    <h4 class="text-center">Em Realização</h4>
+    <h4 class="text-center">Em realização</h4>
     <ul id="doing-list" class="list-group min-vh-50 p-2 bg-light border rounded" ondragover="event.preventDefault()" ondrop="drop(event)">
     </ul>
   </div>
@@ -28,6 +30,7 @@
   </div>
 </div>
 
+<!-- Lógica  -->
 <script>
   let taskIdCounter = 0;
 
