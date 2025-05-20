@@ -1,17 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+{% extends "to_do/base.html" %}
+{% load static %}
+{% block title %}To-Do List{% endblock %}
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-</head>
-<body>
+{% block content %}
+<h1 class="text-center mb-4">Seja bem-vindo ao To-do list</h1>
 
- <h1>  Olá Django</h1>
+<div class="mb-3 d-flex gap-2">
+  <input type="text" id="new-task" class="form-control" placeholder="Digite uma nova tarefa">
+  <button id="add-task-btn" class="btn btn-primary">Adicionar Tarefa</button>
+</div>
 
-    
-</body>
-</html>
+<div class="row">
+  <div class="col-md-4">
+    <h4 class="text-center">A Fazer</h4>
+    <ul id="todo-list" class="list-group min-vh-50 p-2 bg-light border rounded" ondragover="event.preventDefault()" ondrop="drop(event)">
+    </ul>
+  </div>
+  <div class="col-md-4">
+    <h4 class="text-center">Em Realização</h4>
+    <ul id="doing-list" class="list-group min-vh-50 p-2 bg-light border rounded" ondragover="event.preventDefault()" ondrop="drop(event)">
+    </ul>
+  </div>
+  <div class="col-md-4">
+    <h4 class="text-center">Concluído</h4>
+    <ul id="done-list" class="list-group min-vh-50 p-2 bg-light border rounded" ondragover="event.preventDefault()" ondrop="drop(event)">
+    </ul>
+  </div>
+</div>
+
+<script>
+  let taskIdCounter = 0;
+
+  const addTaskBtn = document.getElementById('add-task-btn');
+  const taskInput = document.getElementById('new-task');
+  const todoList = document.getElementById('todo-list');
+
+  function createTaskElement(text) {
+    const li = document.createElement('li');
+    li.className = 'list-group-item d-flex justify-content-between align-items-center';
+    li.id = 'task-' + taskIdCounter++;
+    li.setAttribute('draggable', true);
+    li.addEventListener('dragstart', drag);
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.className = 'form-check-input me-2';
+
+    const span = document.createElement('span');
+    span.textContent = text;
+
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        span.style.textDecoration = 'line-through';
+        span.style.color = 'gray';
+      } else {
+        span.style.textDecoration = 'none';
+        span.style.color = 'inherit';
+      }
+    });
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'btn btn-danger btn-sm ms-2';
+    removeBtn.textContent = 'Remover';
+    removeBtn.onclick = () => li.remove();
+
+    const container = document.createElement('div');
+    container.className = 'd-flex align-items-center flex-grow-1';
+    container.appendChild(checkbox);
+    container.appendChild(span);
+
+    li.appendChild(container);
+    li.appendChild(removeBtn);
+
+    return li;
+  }
+
+  function drag(event) {
+    event.dataTransfer.setData('text/plain', event.target.id);
+  }
+
+  function drop(event) {
+    event.preventDefault();
+    const taskId = event.dataTransfer.getData('text/plain');
+    const taskElement = document.getElementById(taskId);
+    event.currentTarget.appendChild(taskElement);
+  }
+
+  addTaskBtn.addEventListener('click', () => {
+    const taskText = taskInput.value.trim();
+    if (taskText) {
+      const taskItem = createTaskElement(taskText);
+      todoList.appendChild(taskItem);
+      taskInput.value = '';
+    } else {
+      alert('Digite uma tarefa antes de adicionar!');
+    }
+  });
+</script>
+
+{% endblock %}
