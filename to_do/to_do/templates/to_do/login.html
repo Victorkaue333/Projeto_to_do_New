@@ -1,6 +1,6 @@
 {% extends "to_do/base.html" %}
 {% load static %}
-{% block title %}Home{% endblock %}
+{% block title %}Login{% endblock %}
 {% block content %}
 <div class="container mt-5">
     <div class="shadow p-4 mb-5 bg-white rounded mx-auto" style="max-width: 400px;">
@@ -23,7 +23,7 @@
 
             <button type="submit" class="btn btn-primary btn-sm w-100">Entrar</button>
 
-            <p class="signup-link text-center mt-3">
+            <p class="text-center mt-3">
                 Ainda não tem conta? <a href="{% url 'cadastro' %}">Cadastre-se</a>
             </p>
         </form>

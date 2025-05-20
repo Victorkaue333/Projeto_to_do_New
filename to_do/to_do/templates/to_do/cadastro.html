@@ -1,7 +1,6 @@
 {% extends "to_do/base.html" %}
 {% load static %}
 {% block title %}Cadastro{% endblock %}
-
 {% block content %}
 <div class="container mt-5">
     <div class="shadow p-4 mb-5 bg-white rounded mx-auto" style="max-width: 400px;">
@@ -17,33 +16,21 @@
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.email.id_for_label }}" class="form-label">E-mail</label>
-                {{ form.email }}
-                {{ form.email.errors }}
-            </div>
-
-            <div class="mb-3">
-                <label for="{{ form.phone.id_for_label }}" class="form-label">Número de Telefone</label>
-                {{ form.phone }}
-                {{ form.phone.errors }}
-            </div>
-
-            <div class="mb-3">
                 <label for="{{ form.password1.id_for_label }}" class="form-label">Senha</label>
                 {{ form.password1 }}
                 {{ form.password1.errors }}
             </div>
 
             <div class="mb-3">
-                <label for="{{ form.password2.id_for_label }}" class="form-label">Confirmação de Senha</label>
+                <label for="{{ form.password2.id_for_label }}" class="form-label">Confirme a Senha</label>
                 {{ form.password2 }}
                 {{ form.password2.errors }}
             </div>
 
             <button type="submit" class="btn btn-success btn-sm w-100">Cadastrar</button>
 
-            <p class="text-center mt-3">
-                Já tem uma conta? <a href="{% url 'login' %}">Faça login</a>
+            <p class="signup-link text-center mt-3">
+                Já tem uma conta? <a href="{% url 'login' %}">Entrar</a>
             </p>
         </form>
     </div>
