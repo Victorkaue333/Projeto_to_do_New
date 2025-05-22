@@ -3,6 +3,22 @@
 {% block title %}To-Do List{% endblock %}
 
 {% block content %}
-    <h1>Bem-vindo à tela principal!</h1>
+    <h1>Bem-vindo à tela principal do nosso site!</h1>
     
+
+    
+    <h5> Abaixo temos alguns benefícios que você tem ao utilizar o To Do List</h5>
+    <ul class="list-group list-group-flush mt-4">
+        <li class="list-group-item"> ✅ Com o To do List você pode gerenciar suas tarefas com facilidade </li>
+        <li class="list-group-item"> 🧠A nossa interface é intuitiva e simples</li>
+        <li class="list-group-item"> 🔒 O acesso é seguro e rápido</li>
+        <li class="list-group-item">🚀 Comece a organizar hoje mesmo</li>
+
+        
+    <div class="mt-4">
+        <a href="{% url 'login' %}" class="btn btn-primary me-2">Fazer Login</a>
+        <a href="{% url 'cadastro' %}" class="btn btn-outline-primary">Criar Conta</a>
+    <div>
+        
+
 {% endblock %}
