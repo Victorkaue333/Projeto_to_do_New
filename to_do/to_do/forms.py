@@ -1,47 +1,24 @@
+# to_do/forms.py
+
 from django import forms
-from django.core.exceptions import ValidationError
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import User
 
-class LoginForm(forms.Form):
-    username = forms.CharField(
-        label='Nome de Usuário',
-        max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
-    password = forms.CharField(
-        label='Senha',
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
-    )
+# --- ESTE É O FORMULÁRIO QUE ESTAVA FALTANDO ---
+class LoginForm(AuthenticationForm):
+    # O AuthenticationForm já vem com os campos de usuário e senha.
+    # Podemos estilizá-los aqui se quisermos, mas por enquanto, isso é o suficiente.
+    pass
 
-class CadastroForm(forms.Form):
-    username = forms.CharField(
-        label='Nome de Usuário',
-        max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
+
+# --- ESTE É O FORMULÁRIO DE CADASTRO QUE JÁ FIZEMOS ---
+class CadastroForm(UserCreationForm):
     email = forms.EmailField(
-        label='E-mail',
-        widget=forms.EmailInput(attrs={'class': 'form-control'})
-    )
-    phone = forms.CharField(
-        label='Número de Telefone',
-        max_length=15,
-        widget=forms.TextInput(attrs={'class': 'form-control'})
-    )
-    password1 = forms.CharField(
-        label='Senha',
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
-    )
-    password2 = forms.CharField(
-        label='Confirmação de Senha',
-        widget=forms.PasswordInput(attrs={'class': 'form-control'})
+        max_length=254,
+        required=True,
+        help_text='Obrigatório. Um endereço de e-mail válido.'
     )
 
-    def clean(self):
-        cleaned_data = super().clean()
-        password1 = cleaned_data.get("password1")
-        password2 = cleaned_data.get("password2")
-
-        if password1 and password2 and password1 != password2:
-            raise ValidationError("As senhas não coincidem.")
-
-        return cleaned_data
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = ('username', 'email')

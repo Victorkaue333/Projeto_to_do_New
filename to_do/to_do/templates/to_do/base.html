@@ -12,39 +12,130 @@
 
     <!-- Estilo personalizado -->
     <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    <style>
+        /* Faz o body ocupar 100% da tela e organiza com flexbox */
+        html, body {
+            height: 100%;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1; /* empurra o rodapé para baixo */
+        }
+        :root {
+            --color-primary: #4A90E2;      /* Um azul mais moderno e suave */
+            --color-primary-dark: #357ABD; /* Para o efeito hover do botão */
+            --color-neutral: #6c757d;      /* Cinza neutro para "A Fazer" */
+            --color-success: #50C878;      /* Verde esmeralda suave para "Concluído" */
+            --color-danger: #E57373;       /* Vermelho suave para botões de exclusão */
+            --color-background: #f4f7f9;  /* Fundo da página (branco-gelo) */
+            --color-card-bg: #FFFFFF;     /* Fundo dos cards */
+            --color-text-dark: #212529;   /* Cor do texto principal */
+            --color-text-light: #FFFFFF;  /* Cor do texto em fundos escuros */
+            --color-border: #dee2e6;
+        }
+
+        /* Aplica a fonte que já havíamos definido e o novo fundo */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--color-background);
+        }
+
+
+        /* Cor dos cabeçalhos das colunas */
+        .bg-warning {
+            background-color: var(--color-neutral) !important; /* Trocamos o amarelo por cinza */
+        }
+        .bg-primary {
+            background-color: var(--color-primary) !important;
+        }
+        .bg-success {
+            background-color: var(--color-success) !important;
+        }
+
+        /* Cor do botão principal "Adicionar" */
+        .btn-primary {
+            background-color: var(--color-primary);
+            border-color: var(--color-primary);
+            color: var(--color-text-light);
+        }
+        .btn-primary:hover {
+            background-color: var(--color-primary-dark);
+            border-color: var(--color-primary-dark);
+        }
+
+        /* Ajusta as cores dos ícones e textos para a nova paleta */
+        .text-primary {
+            color: var(--color-primary) !important;
+        }
+        .text-success {
+            color: var(--color-success) !important;
+        }
+        .btn-outline-danger {
+            --bs-btn-color: var(--color-danger);
+            --bs-btn-border-color: var(--color-danger);
+            --bs-btn-hover-bg: var(--color-danger);
+            --bs-btn-hover-border-color: var(--color-danger);
+        }
+
+
+        .kanban-column {
+            background-color: var(--color-background);
+            border-radius: 0.375rem;
+            min-height: 70vh;
+        }
+
+        .task-item {
+            background-color: var(--color-card-bg);
+            border: 1px solid var(--color-border);
+            cursor: grab;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+        .task-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .task-check-icon:hover {
+            color: var(--color-primary);
+        }
+    </style>
 </head>
 <body>
 
     <!-- Barra de navegação -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Lista</a>
-        <div class="d-flex">
-            {% if not request.user.is_authenticated %}
-                <a class="btn btn-success me-2" href="{% url 'login' %}">Login</a>
-                <a class="btn btn-success" href="{% url 'cadastro' %}">Cadastre-se</a>
-            {% else %}
-                <span class="navbar-text me-3">
-                    Olá, {{ request.user.username }}!
-                </span>
-                <a class="btn btn-danger" href="{% url 'logout' %}">Sair</a>
-            {% endif %}
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Lista</a>
+            <div class="d-flex">
+                {% if not request.user.is_authenticated %}
+                    <a class="btn btn-success me-2" href="{% url 'login' %}">Login</a>
+                    <a class="btn btn-success" href="{% url 'cadastro' %}">Cadastre-se</a>
+                {% else %}
+                    <span class="navbar-text me-3">
+                        Olá, {{ request.user.username }}!
+                    </span>
+                    <a class="btn btn-danger" href="{% url 'logout' %}">Sair</a>
+                {% endif %}
+            </div>
         </div>
-    </div>
-</nav>
-
+    </nav>
 
     <!-- Conteúdo principal -->
-    <div class="container">
+    <main class="container">
         {% block content %}
 
-
-
         {% endblock %}
-    </div>
+    </main>
 
-    <!-- Rodapé -->
-    <footer class="bg-light text-center text-lg-start mt-5">
+    <!-- Rodapé fixado embaixo -->
+    <footer class="bg-light text-center text-lg-start mt-auto">
         <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.05);">
             © {{ year }} Lista - Todos os direitos reservados
         </div>

@@ -17,15 +17,19 @@ def login_view(request):
     return render(request, 'to_do/login.html', {'form': form})
 
 # Tela de Cadastro
+from .forms import CadastroForm # Importe o formulário
+from django.contrib import messages
+
 def cadastro_view(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CadastroForm(request.POST)
         if form.is_valid():
-            user = form.save()      # Cria novo usuário
-            login(request, user)    # Faz login automático após cadastro
-            return redirect('home')  # Pode ser 'home' ou outra tela
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Conta criada com sucesso para {username}! Faça o login.')
+            return redirect('login') # Redireciona para a página de login
     else:
-        form = UserCreationForm()
+        form = CadastroForm()
     
     return render(request, 'to_do/cadastro.html', {'form': form})
 

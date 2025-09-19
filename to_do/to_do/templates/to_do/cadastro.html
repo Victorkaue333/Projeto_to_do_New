@@ -1,51 +1,88 @@
 {% extends "to_do/base.html" %}
 {% load static %}
-{% block title %}Cadastro{% endblock %}
+{% load widget_tweaks %}
+
+{% block title %}Cadastro - TaskMaster{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="shadow p-4 mb-5 bg-white rounded mx-auto" style="max-width: 400px;">
-        <h2 class="text-center mb-4">Cadastro</h2>
-        <form method="POST" novalidate>
-            {% csrf_token %}
-            {{ form.non_field_errors }}
+<div class="d-flex justify-content-center align-items-center flex-grow-1">
+    
+    <div style="width: 100%; max-width: 450px;">
+        <div class="card shadow-lg border-0 rounded-4">
+            
+            <div class="card-body p-4 p-md-5">
+                <div class="text-center mb-4">
+                    <h2 class="fw-bold">Crie sua <span class="text-primary">CONTA</span></h2>
+                    <p class="text-muted">Preencha os campos abaixo para se registrar</p>
+                </div>
 
-            <div class="mb-3">
-                <label for="{{ form.username.id_for_label }}" class="form-label">Nome de Usuário</label>
-                {{ form.username }}
-                {{ form.username.errors }}
+                <form method="POST" novalidate>
+                    {% csrf_token %}
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger text-center p-2">
+                            {% for error in form.non_field_errors %}{{ error }}{% endfor %}
+                        </div>
+                    {% endif %}
+
+                    <div class="mb-3">
+                        <label for="{{ form.username.id_for_label }}" class="form-label">Nome de Usuário</label>
+                        {% render_field form.username class="form-control form-control-lg" %}
+                        {% for error in form.username.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label">E-mail</label>
+                        {% render_field form.email class="form-control form-control-lg" %}
+                        {% for error in form.email.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="{{ form.password1.id_for_label }}" class="form-label">Senha</label>
+                        <div class="password-wrapper">
+                            {% render_field form.password1 class="form-control form-control-lg" %}
+                            <i class="bi bi-eye-slash password-toggle-icon"></i>
+                        </div>
+                        {% for error in form.password1.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="{{ form.password2.id_for_label }}" class="form-label">Confirmar Senha</label>
+                         <div class="password-wrapper">
+                            {% render_field form.password2 class="form-control form-control-lg" %}
+                            <i class="bi bi-eye-slash password-toggle-icon"></i>
+                        </div>
+                        {% for error in form.password2.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold">CRIAR CONTA</button>
+                    </div>
+
+                    <p class="text-center mt-4">
+                        Já tem uma conta? <a href="{% url 'login' %}" class="fw-medium">Faça login</a>
+                    </p>
+                </form>
             </div>
-
-            <div class="mb-3">
-                <label for="{{ form.email.id_for_label }}" class="form-label">E-mail</label>
-                {{ form.email }}
-                {{ form.email.errors }}
-            </div>
-
-            <div class="mb-3">
-                <label for="{{ form.phone.id_for_label }}" class="form-label">Número de Telefone</label>
-                {{ form.phone }}
-                {{ form.phone.errors }}
-            </div>
-
-            <div class="mb-3">
-                <label for="{{ form.password1.id_for_label }}" class="form-label">Senha</label>
-                {{ form.password1 }}
-                {{ form.password1.errors }}
-            </div>
-
-            <div class="mb-3">
-                <label for="{{ form.password2.id_for_label }}" class="form-label">Confirmação de Senha</label>
-                {{ form.password2 }}
-                {{ form.password2.errors }}
-            </div>
-
-            <button type="submit" class="btn btn-success btn-sm w-100">Cadastrar</button>
-
-            <p class="text-center mt-3">
-                Já tem uma conta? <a href="{% url 'login' %}">Faça login</a>
-            </p>
-        </form>
+        </div>
     </div>
+
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const toggleIcons = document.querySelectorAll('.password-toggle-icon');
+        toggleIcons.forEach(icon => {
+            icon.addEventListener('click', function () {
+                const passwordInput = this.previousElementSibling;
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.classList.toggle('bi-eye');
+                this.classList.toggle('bi-eye-slash');
+            });
+        });
+    });
+</script>
 {% endblock %}
